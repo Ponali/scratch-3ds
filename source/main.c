@@ -9,7 +9,7 @@ bool screenSwap=true;
 
 void render(bool scr, float touchX, float touchY){
 	if(scr^screenSwap){
-		editorThink(scr,touchX,touchY);
+		editorBackend(scr,touchX,touchY);
 	} else {
 		// temporary triangle
 		C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
