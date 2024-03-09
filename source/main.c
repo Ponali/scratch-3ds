@@ -5,7 +5,7 @@ float min(a,b){return a<b?a:b;}
 #include <3ds.h>
 #include "render_block.c"
 
-void render(bool scr){
+void render(bool scr, float touchX, float touchY){
 	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
 	u32	looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
 	u32	sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
@@ -16,7 +16,7 @@ void render(bool scr){
 	u32	variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
 	u32	my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
 	u32	extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
-	renderBlock(scr?sensing_tab_color:operators_tab_color,scr?100:0,scr?100:0,scr?"top screen sensing color":"bottom screen operator color");
+	renderBlock(scr?sensing_tab_color:operators_tab_color,scr?100:touchX,scr?100:touchY,scr?"top screen sensing color":"bottom screen operator color");
 }
 
 int main(int argc, char* argv[]) {
@@ -39,20 +39,23 @@ int main(int argc, char* argv[]) {
 		u32 kDown = hidKeysDown();
 		if (kDown & KEY_SELECT)
 			break;
+		
+		touchPosition touch;
+		hidTouchRead(&touch);
 
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
 
-		render(false);
+		render(false,touch.px,touch.py);
 		
 		C2D_Flush();
 		
 		C2D_TargetClear(top, clear_color);
 		C2D_SceneBegin(top);
 		
-		render(true);
+		render(true,0.0f,0.0f);
 
 		C2D_Flush();
 		C3D_FrameEnd(0);
