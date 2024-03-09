@@ -3,7 +3,17 @@
 #include "render_block.c"
 
 void render(bool scr){
-	renderBlock(C2D_Color32(153, 102, 255, 0xFF),scr?100:0,scr?100:0,scr?"this is the top block":"and this block is the bottom block");
+	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
+	u32	looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
+	u32	sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
+	u32	events_tab_color = C2D_Color32(255, 191, 0, 0xFF);
+	u32	control_tab_color = C2D_Color32(255, 171, 25, 0xFF);
+	u32	sensing_tab_color = C2D_Color32(92, 177, 214, 0xFF);
+	u32	operators_tab_color = C2D_Color32(89, 192, 89, 0xFF);
+	u32	variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
+	u32	my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
+	u32	extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
+	renderBlock(sensing_tab_color,scr?100:0,scr?100:0,scr?"top screen":"bottom screen");
 }
 
 int main(int argc, char* argv[]) {
@@ -16,7 +26,7 @@ int main(int argc, char* argv[]) {
 	C3D_RenderTarget* bot = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
 	initBlockRendering();
-
+	
 	u32 clear_color = C2D_Color32f(1.0f, 1.0f, 1.0f, 1.0f);
 
 	while (aptMainLoop()) {
