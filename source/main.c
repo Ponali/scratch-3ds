@@ -3,26 +3,17 @@ float min(a,b){return a<b?a:b;}
 
 #include <citro2d.h>
 #include <3ds.h>
-#include "render_block.c"
+#include "editor.c"
 
-float blockposX = 0;
-float blockposY = 0;
-bool dragstarted = false;
-float stylusblockposdiffX = 0;
-float stylusblockposdiffY = 0;
+bool screenSwap=true;
 
 void render(bool scr, float touchX, float touchY){
-	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
-	u32	looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
-	u32	sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
-	u32	events_tab_color = C2D_Color32(255, 191, 0, 0xFF);
-	u32	control_tab_color = C2D_Color32(255, 171, 25, 0xFF);
-	u32	sensing_tab_color = C2D_Color32(92, 177, 214, 0xFF);
-	u32	operators_tab_color = C2D_Color32(89, 192, 89, 0xFF);
-	u32	variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
-	u32	my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
-	u32	extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
-	renderBlock(scr?sensing_tab_color:operators_tab_color,scr?100:touchX,scr?100:touchY,scr?"top screen sensing color":"bottom screen operator color");
+	if(scr^screenSwap){
+		editorThink(scr,touchX,touchY);
+	} else {
+		// temporary triangle
+		C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
+	}
 }
 
 int main(int argc, char* argv[]) {
@@ -43,6 +34,8 @@ int main(int argc, char* argv[]) {
 		hidScanInput();
 
 		u32 kDown = hidKeysDown();
+		if (kDown & KEY_L)
+			screenSwap=!screenSwap;
 		if (kDown & KEY_SELECT)
 			break;
 		
@@ -53,22 +46,8 @@ int main(int argc, char* argv[]) {
 
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
-		if (touch.px<blockposX+30 && touch.px>blockposX && touch.py<blockposY+30 && touch.py>blockposY && dragstarted==false)
-		{
-			dragstarted = true;
-			stylusblockposdiffX = touch.px-blockposX;
-			stylusblockposdiffY = touch.py-blockposY;
-		}
-		if (dragstarted==true && (touch.px!=0 || touch.py!=0))
-		{
-			blockposX = touch.px-stylusblockposdiffX;
-			blockposY = touch.py-stylusblockposdiffY;
-		}
-		else
-		{
-			dragstarted = false;
-		}
-		render(false,blockposX,blockposY);
+
+		render(false,touch.px,touch.py);
 		
 		C2D_Flush();
 		
