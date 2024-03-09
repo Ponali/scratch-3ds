@@ -21,14 +21,14 @@ static void renderBlockText(float x, float y){
 }
 
 static void renderBlockShadow(u32 c, float x, float y, int width){
-	C2D_DrawRectangle(0+x, 0+y, 0, 20, 40,c,c,c,c);          // left-most part
-	C2D_DrawTriangle(20+x,0+y,c,35+x,10+y,c,20+x,10+y,c,0);  // left triangle for top
-	C2D_DrawTriangle(60+x,0+y,c,45+x,10+y,c,60+x,10+y,c,0);  // right triangle for top
-	C2D_DrawRectangle(20+x, 10+y, 0, 40, 30,c,c,c,c);        // fill inside
-	C2D_DrawTriangle(20+x,40+y,c,35+x,50+y,c,35+x,40+y,c,0); // left triangle for bottom
-	C2D_DrawTriangle(60+x,40+y,c,45+x,50+y,c,45+x,40+y,c,0); // right triangle for bottom
-	C2D_DrawRectangle(35+x, 40+y, 0, 10, 10,c,c,c,c);        // fill bottom lump
-	C2D_DrawRectangle(60+x, 0+y, 0, width-50, 40,c,c,c,c);   // right-most part
+	C2D_DrawRectangle(0+x, 0+y, 0, 20, 40,c,c,c,c);                // left-most part
+	C2D_DrawTriangle(20+x,0+y,c,35+x,10+y,c,20+x,10+y,c,0);        // left triangle for top
+	C2D_DrawTriangle(60+x,0+y,c,45+x,10+y,c,60+x,10+y,c,0);        // right triangle for top
+	C2D_DrawRectangle(20+x, 10+y, 0, 40, 30,c,c,c,c);              // fill inside
+	C2D_DrawTriangle(20+x,40+y,c,35+x,50+y,c,35+x,40+y,c,0);       // left triangle for bottom
+	C2D_DrawTriangle(60+x,40+y,c,45+x,50+y,c,45+x,40+y,c,0);       // right triangle for bottom
+	C2D_DrawRectangle(35+x, 40+y, 0, 10, 10,c,c,c,c);              // fill bottom lump
+	C2D_DrawRectangle(60+x, 0+y, 0, max(width-50,20), 40,c,c,c,c); // right-most part
 }
 
 static void renderBlock(u32 c, float x, float y, char text[]){

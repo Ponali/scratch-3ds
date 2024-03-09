@@ -1,3 +1,6 @@
+float max(a,b){return a>b?a:b;}
+float min(a,b){return a<b?a:b;}
+
 #include <citro2d.h>
 #include <3ds.h>
 #include "render_block.c"
