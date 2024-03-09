@@ -1,9 +1,10 @@
 #include "render_block.c"
 
-static float stylusblockposdiffX = 0;
-static float stylusblockposdiffY = 0;
-static bool blockbeingmoved = false;
-static int blockmatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; //3rd entry would be block index
+static float stylusDiffX = 0;
+static float stylusDiffY = 0;
+static bool movingBlock = false;
+static int movingBlockIdx = 0;
+static int blockMatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; //3rd entry would be block index
 
 static void editorRender(bool scr){
 	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
@@ -20,41 +21,28 @@ static void editorRender(bool scr){
 	int i;
 	for (i=0;i<2;i++)
 	{
-		renderBlock(scr?colorarray[i]:colorarray[i+2],blockmatrix[i][0],blockmatrix[i][1],scr?"top screen":"bottom screen");
+		renderBlock(scr?colorarray[i]:colorarray[i+2],blockMatrix[i][0],blockMatrix[i][1],scr?"top screen":"bottom screen");
 	}
 	
 }
 
 static void editorBackend(bool scr, float touchX, float touchY){
-	int i;
-	for (i=0;i<2;i++)
-	{
-		if (touchX<blockmatrix[i][0]+30 && touchX>blockmatrix[i][0] && touchY<blockmatrix[i][1]+30 && touchY>blockmatrix[i][1] && blockmatrix[i][3]==0)
-		{
-			if (blockbeingmoved==false)//this whole blockbeingmoved stuff is unfinished. the blocks used to stick together once the stylus gets close enough, so i put this in so you cant grab the other blocks while one is being grabbed, however this doesnt work and idk why.
-			{
-				blockmatrix[i][3]=1;
-				blockbeingmoved = true;
-				stylusblockposdiffX = touchX-blockmatrix[i][0];
-				stylusblockposdiffY = touchY-blockmatrix[i][1];
-			}
-			
+	bool touching=((touchX+touchY)!=0);
+	if(movingBlock){
+		if(touching){
+			blockMatrix[movingBlockIdx][0]=touchX+stylusDiffX;
+			blockMatrix[movingBlockIdx][1]=touchY+stylusDiffY;
+		} else {
+			movingBlock=false;
 		}
-		if (blockmatrix[i][3]==1 && (touchX!=0 || touchY!=0))
-		{
-			blockmatrix[i][0] = touchX-stylusblockposdiffX;
-			blockmatrix[i][1] = touchY-stylusblockposdiffY;
-		}
-		else
-		{
-			blockmatrix[i][3]=0;
-			blockbeingmoved=false;
-			for (i=0;i<2;i++)
-			{
-				if (blockmatrix[i][3]==1)
-				{
-					blockbeingmoved = true;
-				}
+	} else if(touching) {
+		for(int i=0;i<2;i++){
+			if(touchX<blockMatrix[i][0]+30 && touchX>blockMatrix[i][0] && touchY<blockMatrix[i][1]+30 && touchY>blockMatrix[i][1] && blockMatrix[i][3]==0){
+				movingBlockIdx=i;
+				movingBlock=true;
+				stylusDiffX=blockMatrix[i][0]-touchX;
+				stylusDiffY=blockMatrix[i][1]-touchY;
+				i=100; // the value here does not matter, what's important is that we get out of the loop
 			}
 		}
 	}
