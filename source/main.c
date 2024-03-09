@@ -5,6 +5,10 @@ float min(a,b){return a<b?a:b;}
 #include <3ds.h>
 #include "render_block.c"
 
+float blockposX = 0;
+float blockposY = 0;
+bool dragstarted = false; //janky but works
+
 void render(bool scr, float touchX, float touchY){
 	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
 	u32	looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
@@ -47,8 +51,20 @@ int main(int argc, char* argv[]) {
 
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
-
-		render(false,touch.px,touch.py);
+		if (touch.px<blockposX+30 && touch.px>blockposX && touch.py<blockposY+30 && touch.py>blockposY)
+		{
+			dragstarted = true;
+		}
+		if (dragstarted==true && (touch.px!=0 || touch.py!=0))
+		{
+			blockposX = touch.px;
+			blockposY = touch.py;
+		}
+		else
+		{
+			dragstarted = false;
+		}
+		render(false,blockposX,blockposY);
 		
 		C2D_Flush();
 		
