@@ -13,7 +13,7 @@ void render(bool scr){
 	u32	variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
 	u32	my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
 	u32	extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
-	renderBlock(sensing_tab_color,scr?100:0,scr?100:0,scr?"top screen":"bottom screen");
+	renderBlock(scr?sensing_tab_color:operators_tab_color,scr?100:0,scr?100:0,scr?"top screen sensing color":"bottom screen operator color");
 }
 
 int main(int argc, char* argv[]) {
