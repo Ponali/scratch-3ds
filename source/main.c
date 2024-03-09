@@ -1,4 +1,4 @@
-float max(a,b){return a>b?a:b;}
+float max(a,b){return a>b?a:b;} //test comment
 float min(a,b){return a<b?a:b;}
 
 #include <citro2d.h>
