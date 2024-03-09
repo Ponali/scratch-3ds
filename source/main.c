@@ -7,7 +7,9 @@ float min(a,b){return a<b?a:b;}
 
 float blockposX = 0;
 float blockposY = 0;
-bool dragstarted = false; //janky but works
+bool dragstarted = false;
+float stylusblockposdiffX = 0;
+float stylusblockposdiffY = 0;
 
 void render(bool scr, float touchX, float touchY){
 	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
@@ -51,14 +53,16 @@ int main(int argc, char* argv[]) {
 
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
-		if (touch.px<blockposX+30 && touch.px>blockposX && touch.py<blockposY+30 && touch.py>blockposY)
+		if (touch.px<blockposX+30 && touch.px>blockposX && touch.py<blockposY+30 && touch.py>blockposY && dragstarted==false)
 		{
 			dragstarted = true;
+			stylusblockposdiffX = touch.px-blockposX;
+			stylusblockposdiffY = touch.py-blockposY;
 		}
 		if (dragstarted==true && (touch.px!=0 || touch.py!=0))
 		{
-			blockposX = touch.px;
-			blockposY = touch.py;
+			blockposX = touch.px-stylusblockposdiffX;
+			blockposY = touch.py-stylusblockposdiffY;
 		}
 		else
 		{
