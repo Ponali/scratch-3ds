@@ -19,7 +19,7 @@ static void renderCursor(float cursorX, float cursorY, bool pressedA){
 	C2D_DrawTriangle(cursorX+0,cursorY+0,c,cursorX+15,cursorY+0,c,cursorX+0,cursorY+15,c,0);
 }
 
-static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY){
+static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY, bool bsel, u32 kDown){
 	bool pressedA=false;if(kHeld&KEY_A){pressedA=true;}
 	float useX=touchX;float useY=touchY;
 	if(scr){
@@ -34,8 +34,12 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cS
 	if(scr^screenSwap){
 		editorBackend(scr,useX,useY);
 	} else {
-		// temporary triangle
-		C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
+		if (bsel){
+			blockSelector(scr, kDown);
+		} else {
+			// temporary triangle
+			C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
+		}
 	}
 	if(scr){
 		renderCursor(cursorX,cursorY,pressedA);
@@ -43,6 +47,6 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cS
 }
 
 static void screenSwapCheck(u32 kDown){
-	if (kDown & KEY_L)
+	if (kDown & KEY_ZL)
 		screenSwap=!screenSwap;
 }

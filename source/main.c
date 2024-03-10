@@ -1,9 +1,11 @@
-float max(a,b){return a>b?a:b;}
-float min(a,b){return a<b?a:b;}
+float max(a,b){return a>b?a:b;};
+float min(a,b){return a<b?a:b;};
 
 #include <citro2d.h>
 #include <3ds.h>
 #include "screen_manage.c"
+
+bool bsel = false;
 
 int main(int argc, char* argv[]) {
 	gfxInitDefault();
@@ -27,6 +29,8 @@ int main(int argc, char* argv[]) {
 		screenSwapCheck(kDown);
 		if (kDown & KEY_SELECT)
 			break;
+		if (kDown & KEY_X)
+			bsel=!bsel;
 		
 		touchPosition touch;
 		hidTouchRead(&touch);
@@ -39,14 +43,14 @@ int main(int argc, char* argv[]) {
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
 
-		renderScreen(kHeld,false,touch.px,touch.py,cStickPos.dx,cStickPos.dy);
+		renderScreen(kHeld,false,touch.px,touch.py,cStickPos.dx,cStickPos.dy,bsel,kDown);
 		
 		C2D_Flush();
 		
 		C2D_TargetClear(top, clear_color);
 		C2D_SceneBegin(top);
 		
-		renderScreen(kHeld,true,touch.px,touch.py,cStickPos.dx,cStickPos.dy);
+		renderScreen(kHeld,true,touch.px,touch.py,cStickPos.dx,cStickPos.dy,bsel,kDown);
 
 		C2D_Flush();
 		C3D_FrameEnd(0);
