@@ -9,6 +9,10 @@ static void updateCursor(u32 kHeld){
 	if(kHeld&KEY_DDOWN) {cursorY++;}
 	if(kHeld&KEY_DLEFT) {cursorX--;}
 	if(kHeld&KEY_DUP)   {cursorY--;}
+	if(cursorX<0){cursorX=0;}
+	if(cursorY<0){cursorY=0;}
+	if(cursorX>400){cursorX=400;}
+	if(cursorY>240){cursorY=240;}
 }
 
 static void renderCursor(float cursorX, float cursorY, bool pressedA){
