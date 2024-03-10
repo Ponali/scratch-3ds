@@ -3,18 +3,7 @@ float min(a,b){return a<b?a:b;}
 
 #include <citro2d.h>
 #include <3ds.h>
-#include "editor.c"
-
-bool screenSwap=true;
-
-void render(bool scr, float touchX, float touchY){
-	if(scr^screenSwap){
-		editorBackend(scr,touchX,touchY);
-	} else {
-		// temporary triangle
-		C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
-	}
-}
+#include "screen_manage.c"
 
 int main(int argc, char* argv[]) {
 	gfxInitDefault();
@@ -34,8 +23,8 @@ int main(int argc, char* argv[]) {
 		hidScanInput();
 
 		u32 kDown = hidKeysDown();
-		if (kDown & KEY_L)
-			screenSwap=!screenSwap;
+		u32 kHeld = hidKeysHeld();
+		screenSwapCheck(kDown);
 		if (kDown & KEY_SELECT)
 			break;
 		
@@ -47,14 +36,14 @@ int main(int argc, char* argv[]) {
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
 
-		render(false,touch.px,touch.py);
+		renderScreen(kDown,kHeld,false,touch.px,touch.py);
 		
 		C2D_Flush();
 		
 		C2D_TargetClear(top, clear_color);
 		C2D_SceneBegin(top);
 		
-		render(true,0.0f,0.0f);
+		renderScreen(kDown,kHeld,true,touch.px,touch.py);
 
 		C2D_Flush();
 		C3D_FrameEnd(0);

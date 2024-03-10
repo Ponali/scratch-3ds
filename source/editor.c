@@ -18,10 +18,8 @@ static void editorRender(bool scr){
 	u32	my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
 	u32	extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
 	u32 colorarray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
-	int i;
-	for (i=0;i<2;i++)
-	{
-		renderBlock(scr?colorarray[i]:colorarray[i+2],blockMatrix[i][0],blockMatrix[i][1],scr?"top screen":"bottom screen");
+	for(int i=0;i<2;i++){
+		renderBlock(colorarray[i],blockMatrix[i][0],blockMatrix[i][1],"sample block text");
 	}
 	
 }
