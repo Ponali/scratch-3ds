@@ -7,18 +7,22 @@ static bool movingBlock = false;
 static int movingBlockIdx = 0;
 static int blockMatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; //3rd entry would be block index
 static int bselSelectedBlock = 0;
+static bool editorInitiated = false;
+static float blockSelectorScroll = 10.0f;
+
+// block colors
+static u32 motion_tab_color;
+static u32 looks_tab_color;
+static u32 sound_tab_color;
+static u32 events_tab_color;
+static u32 control_tab_color;
+static u32 sensing_tab_color;
+static u32 operators_tab_color;
+static u32 variables_tab_color;
+static u32 my_blocks_tab_color;
+static u32 extension_tab_color;
 
 static void editorRender(bool scr){
-	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
-	u32 looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
-	u32 sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
-	u32 events_tab_color = C2D_Color32(255, 191, 0, 0xFF);
-	u32 control_tab_color = C2D_Color32(255, 171, 25, 0xFF);
-	u32 sensing_tab_color = C2D_Color32(92, 177, 214, 0xFF);
-	u32 operators_tab_color = C2D_Color32(89, 192, 89, 0xFF);
-	u32 variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
-	u32 my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
-	u32 extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
 	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
 	for(int i=0;i<2;i++){
 		renderBlock(colorArray[i],blockMatrix[i][0],blockMatrix[i][1],"sample block text");
@@ -27,6 +31,19 @@ static void editorRender(bool scr){
 }
 
 static void editorBackend(bool scr, float touchX, float touchY){
+	if(!editorInitiated){
+		motion_tab_color = C2D_Color32(76, 151, 255, 0xFF);
+		looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
+		sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
+		events_tab_color = C2D_Color32(255, 191, 0, 0xFF);
+		control_tab_color = C2D_Color32(255, 171, 25, 0xFF);
+		sensing_tab_color = C2D_Color32(92, 177, 214, 0xFF);
+		operators_tab_color = C2D_Color32(89, 192, 89, 0xFF);
+		variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
+		my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
+		extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
+		editorInitiated=true;
+	}
 	bool touching=((touchX+touchY)!=0);
 	if(movingBlock){
 		if(touching){
@@ -49,17 +66,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 	editorRender(scr);
 }
 
-static void blockSelector(bool scr, u32 kDown){
-	u32 motion_tab_color = C2D_Color32(76, 151, 255, 0xFF); //temporary duplicate colors since ponali went offline and i couldnt think of any way to use the colors from editorrender
-	u32 looks_tab_color = C2D_Color32(153, 102, 255, 0xFF);
-	u32 sound_tab_color = C2D_Color32(207, 99, 207, 0xFF);
-	u32 events_tab_color = C2D_Color32(255, 191, 0, 0xFF);
-	u32 control_tab_color = C2D_Color32(255, 171, 25, 0xFF);
-	u32 sensing_tab_color = C2D_Color32(92, 177, 214, 0xFF);
-	u32 operators_tab_color = C2D_Color32(89, 192, 89, 0xFF);
-	u32 variables_tab_color = C2D_Color32(255, 140, 26, 0xFF);
-	u32 my_blocks_tab_color = C2D_Color32(255, 102, 128, 0xFF);
-	u32 extension_tab_color = C2D_Color32(15, 189, 140, 0xFF);
+static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
 	if (kDown & KEY_L) {
 		if (bselSelectedBlock==0) {
@@ -75,10 +82,17 @@ static void blockSelector(bool scr, u32 kDown){
 			bselSelectedBlock++;
 		}
 	}
-	int bselColorIndex;
+	/*int bselColorIndex;
 	for (int i=0;i<9;i++) {
 		if (bselSelectedBlock>=blockColor[i][0] && bselSelectedBlock<=blockColor[i][1])
 			bselColorIndex=i;
+	}*/
+	int scrollI=blockSelectorScroll/50;
+	for(int i=0-scrollI;i<6-scrollI;i++){
+		renderBlock(colorArray[i],10,blockSelectorScroll+i*50,blockText[i]);
 	}
-	renderBlock(colorArray[bselColorIndex],10,10,blockText[bselSelectedBlock]);
+	if(touchX+touchY!=0){
+		blockSelectorScroll-=(touchY-120)/30;
+		if(blockSelectorScroll>10){blockSelectorScroll=10;}
+	}
 }
