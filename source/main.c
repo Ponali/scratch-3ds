@@ -1,5 +1,5 @@
-float max(a,b){return a>b?a:b;};
-float min(a,b){return a<b?a:b;};
+float max(float a,float b){return a>b?a:b;};
+float min(float a,float b){return a<b?a:b;};
 
 #include <citro2d.h>
 #include <3ds.h>

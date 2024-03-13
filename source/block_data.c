@@ -1,5 +1,5 @@
 static int blockColor[10][2] = {{0,17},{18,37},{38,46},{47,54},{55,65},{66,83},{84,101},{102,106},{107,107}};
-static char blockText[105][35] =
+static char blockText[105][36] =
 {"move 10 steps",
 "turn clockwise 15 degrees",
 "turn counterclockwise 15 degrees",

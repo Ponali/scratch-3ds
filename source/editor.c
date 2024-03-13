@@ -6,9 +6,9 @@ static float stylusDiffY = 0;
 static bool movingBlock = false;
 static int movingBlockIdx = 0;
 static int blockMatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; //3rd entry would be block index
-static int bselSelectedBlock = 0;
 static bool editorInitiated = false;
 static float blockSelectorScroll = 10.0f;
+static int blockSelectorScrollSpeed= 0;
 
 // block colors
 static u32 motion_tab_color;
@@ -68,7 +68,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 
 static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
-	if (kDown & KEY_L) {
+	/*if (kDown & KEY_L) {
 		if (bselSelectedBlock==0) {
 			bselSelectedBlock=104;
 		} else {
@@ -81,18 +81,26 @@ static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 		} else {
 			bselSelectedBlock++;
 		}
-	}
-	/*int bselColorIndex;
-	for (int i=0;i<9;i++) {
-		if (bselSelectedBlock>=blockColor[i][0] && bselSelectedBlock<=blockColor[i][1])
-			bselColorIndex=i;
 	}*/
 	int scrollI=blockSelectorScroll/50;
 	for(int i=0-scrollI;i<6-scrollI;i++){
-		renderBlock(colorArray[i],10,blockSelectorScroll+i*50,blockText[i]);
+		if(i<=104){
+			int bselColorIndex;
+			for (int ii=0;ii<9;ii++) {
+				if (i>=blockColor[ii][0] && i<=blockColor[ii][1]){
+					bselColorIndex=ii;
+				}
+			}
+			renderBlock(colorArray[bselColorIndex],10,blockSelectorScroll+i*50,blockText[i]);
+		}
 	}
 	if(touchX+touchY!=0){
-		blockSelectorScroll-=(touchY-120)/30;
-		if(blockSelectorScroll>10){blockSelectorScroll=10;}
+		blockSelectorScroll-=((touchY-120)/30)*(blockSelectorScrollSpeed/60+1);
+		if(blockSelectorScroll>10){blockSelectorScroll=10;};
+		if(blockSelectorScroll<(-50*(104-3.5))){blockSelectorScroll=(-50*(104-3.5));};
+		blockSelectorScrollSpeed+=1;
+		if(blockSelectorScrollSpeed>(60*4)){blockSelectorScrollSpeed=(60*4);}
+	} else {
+		blockSelectorScrollSpeed=0;
 	}
 }
