@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
 	C3D_RenderTarget* bot = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
-	initBlockRendering();
+	initBlockRendering(/*blockColor,blockText*/);
 	
 	u32 clear_color = C2D_Color32f(1.0f, 1.0f, 1.0f, 1.0f);
 

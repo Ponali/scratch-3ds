@@ -108,3 +108,5 @@ static char blockText[105][36] =
 "show variable my variable",
 "hide variable my variable",
 "placeholder block"};
+static int getBlockColor(int idxA,int idxB){return blockColor[idxA][idxB];};
+static char* getBlockText(int idx){return blockText[idx];};
