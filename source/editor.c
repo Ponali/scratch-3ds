@@ -6,38 +6,48 @@ static float stylusDiffY = 0;
 static bool movingBlock = false;
 static int movingBlockIdx = 0;
 static struct Block blockMatrix[2]={{0,0,0},{1,50,50}};
+static int blockMatrixSize=2;
+static struct Block* blockMatrixDynamic;
 // static int blockMatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; 3rd entry would be block index
 static float blockSelectorScroll = 10.0f;
 static int blockSelectorScrollSpeed= 0;
+static bool blockSelectorTouchHold=false;
+static bool editorInitiated=false;
 
 static void editorRender(bool scr){
-	for(int i=0;i<2;i++){
+	for(int i=0;i<blockMatrixSize;i++){
 		/*struct Block currentBlock;
 		currentBlock.id=i;
 		currentBlock.x=i*50;
 		currentBlock.y=i*50;*/
 		//renderBlock(colorArray[i],blockMatrix[i][0],blockMatrix[i][1],"sample block text");
-		renderBlock(blockMatrix[i]);
+		renderBlock(blockMatrixDynamic[i]);
 	}
 	
 }
 
 static void editorBackend(bool scr, float touchX, float touchY){
+	if(!editorInitiated){
+		blockMatrixDynamic = (int*)calloc(blockMatrixSize,sizeof(struct Block));
+		memcpy(blockMatrixDynamic,blockMatrix,sizeof(blockMatrix));
+		editorInitiated=true;
+	}
 	bool touching=((touchX+touchY)!=0);
 	if(movingBlock){
 		if(touching){
-			blockMatrix[movingBlockIdx].x=touchX+stylusDiffX;
-			blockMatrix[movingBlockIdx].y=touchY+stylusDiffY;
+			blockMatrixDynamic[movingBlockIdx].x=touchX+stylusDiffX;
+			blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
 		} else {
 			movingBlock=false;
 		}
 	} else if(touching) {
-		for(int i=0;i<2;i++){
-			if(touchX<blockMatrix[i].x+30 && touchX>blockMatrix[i].x && touchY<blockMatrix[i].y+30 && touchY>blockMatrix[i].y/* && blockMatrix[i][3]==0*/){
+		for(int i=0;i<blockMatrixSize;i++){
+			if(blockCollision(blockMatrixDynamic[i],touchX,touchY)){
+			//if(touchX<blockMatrix[i].x+30 && touchX>blockMatrix[i].x && touchY<blockMatrix[i].y+30 && touchY>blockMatrix[i].y/* && blockMatrix[i][3]==0*/){
 				movingBlockIdx=i;
 				movingBlock=true;
-				stylusDiffX=blockMatrix[i].x-touchX;
-				stylusDiffY=blockMatrix[i].y-touchY;
+				stylusDiffX=blockMatrixDynamic[i].x-touchX;
+				stylusDiffY=blockMatrixDynamic[i].y-touchY;
 				i=100; // the value here does not matter, what's important is that we get out of the loop
 			}
 		}
@@ -45,40 +55,38 @@ static void editorBackend(bool scr, float touchX, float touchY){
 	editorRender(scr);
 }
 
-static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
-	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
-	/*if (kDown & KEY_L) {
-		if (bselSelectedBlock==0) {
-			bselSelectedBlock=104;
-		} else {
-			bselSelectedBlock--;
-		}
+static void insertBlockFromSelector(int id){
+	struct Block* temp=blockMatrixDynamic;
+	blockMatrixDynamic = realloc(blockMatrixDynamic,blockMatrixSize*sizeof(struct Block));
+	if(!blockMatrixDynamic){
+		blockMatrixDynamic=temp;
+	} else {
+		struct Block newBlock;
+		newBlock.id=id;newBlock.x=50;newBlock.y=50;
+		blockMatrixDynamic[blockMatrixSize]=newBlock;
+		blockMatrixSize++;
 	}
-	if (kDown & KEY_R) {
-		if (bselSelectedBlock==104) {
-			bselSelectedBlock=0;
-		} else {
-			bselSelectedBlock++;
-		}
-	}*/
+}
+
+static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
+	if(blockSelectorTouchHold&&(touchX+touchY==0)){blockSelectorTouchHold=false;}
+	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
+	bool touchedBlock=false;
 	int scrollI=blockSelectorScroll/50;
 	for(int i=0-scrollI;i<6-scrollI;i++){
 		if(i<=104){
-			/*int bselColorIndex;
-			for (int ii=0;ii<9;ii++) {
-				if (i>=blockColor[ii][0] && i<=blockColor[ii][1]){
-					bselColorIndex=ii;
-				}
-			}*/
 			struct Block blockToRender;
 			blockToRender.id=i;
 			blockToRender.x=10;
 			blockToRender.y=blockSelectorScroll+i*50;
 			renderBlock(blockToRender);
-			//renderBlockFromProperties(colorArray[bselColorIndex],10,blockSelectorScroll+i*50,blockText[i]);
+			if((touchX+touchY!=0)&&(!blockSelectorTouchHold)&&blockCollision(blockToRender,touchX,touchY)&&(blockSelectorScrollSpeed==0)){
+				touchedBlock=true;
+				insertBlockFromSelector(i);
+			}
 		}
 	}
-	if(touchX+touchY!=0){
+	if((touchX+touchY!=0)&&(!touchedBlock)){
 		blockSelectorScroll-=((touchY-120)/30)*(blockSelectorScrollSpeed/60+1);
 		if(blockSelectorScroll>10){blockSelectorScroll=10;};
 		if(blockSelectorScroll<(-50*(104-3.5))){blockSelectorScroll=(-50*(104-3.5));};
@@ -87,4 +95,5 @@ static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 	} else {
 		blockSelectorScrollSpeed=0;
 	}
+	if((!blockSelectorTouchHold)&&(touchX+touchY!=0)){blockSelectorTouchHold=true;}
 }

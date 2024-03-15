@@ -83,3 +83,7 @@ static void renderBlock(struct Block a){
 	}
 	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,/*blockText[id]*/getBlockText(id));
 }
+
+static bool blockCollision(struct Block a, float x, float y){
+	return (x<a.x+30 && x>a.x && y<a.y+30 && y>a.y);
+}
