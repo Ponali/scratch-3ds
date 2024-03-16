@@ -37,15 +37,17 @@ static void editorBackend(bool scr, float touchX, float touchY){
 		if(touching){
 			blockMatrixDynamic[movingBlockIdx].x=touchX+stylusDiffX;
 			blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
-			struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
 			int loopCount=0;
-			// while((*moveBlock).hasAfter){
+			//while((*moveBlock).hasAfter){
 			// jankfix because hasAfter wasnt being set, original bit of code above
-			while(loopCount < 2){
+			struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
+			while(loopCount < blockMatrixSize){
 				loopCount++;
-				moveBlock=(*moveBlock).after;
-				moveBlock->x=touchX+stylusDiffX;
-				moveBlock->y=touchY+stylusDiffY+40*loopCount;
+				if((*moveBlock).hasAfter){
+					moveBlock=(*moveBlock).after;
+					moveBlock->x=touchX+stylusDiffX;
+					moveBlock->y=touchY+stylusDiffY+40*loopCount;
+				}
 				// this makes block after the one being dragged get also dragged, but this does nothing?
 			}
 		} else {
@@ -55,6 +57,17 @@ static void editorBackend(bool scr, float touchX, float touchY){
 					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)){
 						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
 						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y+40;
+						struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
+						int loopCount=0;
+						while(loopCount < blockMatrixSize){
+							loopCount++;
+							if((*moveBlock).hasAfter){
+								moveBlock=(*moveBlock).after;
+								moveBlock->x=blockMatrixDynamic[i].x;
+								moveBlock->y=blockMatrixDynamic[i].y+40+40*loopCount;
+							}
+							// this makes block after the one being dragged get also dragged, but this does nothing?
+						}
 						blockMatrixDynamic[i].after=&blockMatrixDynamic[movingBlockIdx];
 						blockMatrixDynamic[i].hasAfter=true;
 					}
@@ -69,7 +82,12 @@ static void editorBackend(bool scr, float touchX, float touchY){
 				movingBlock=true;
 				stylusDiffX=blockMatrixDynamic[i].x-touchX;
 				stylusDiffY=blockMatrixDynamic[i].y-touchY;
-				blockMatrixDynamic[i].hasAfter=false;
+				//blockMatrixDynamic[i].hasAfter=false;
+				for(int j=0;j<blockMatrixSize;j++){
+					if(blockMatrixDynamic[j].after==(&blockMatrixDynamic[i])){
+						blockMatrixDynamic[j].hasAfter=false;
+					}
+				}
 				i=100; // the value here does not matter, what's important is that we get out of the loop
 			}
 		}
@@ -84,7 +102,7 @@ static void insertBlockFromSelector(int id){
 		blockMatrixDynamic=temp;
 	} else {
 		struct Block newBlock;
-		newBlock.id=id;newBlock.x=50;newBlock.y=50;
+		newBlock.id=id;newBlock.x=50;newBlock.y=50;newBlock.hasAfter=false;
 		blockMatrixDynamic[blockMatrixSize]=newBlock;
 		blockMatrixSize++;
 	}

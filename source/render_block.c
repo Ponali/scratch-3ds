@@ -82,7 +82,7 @@ static void renderBlock(struct Block a){
 			bselColorIndex=ii;
 			ii=9;
 		}
-	}
+	};
 	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,getBlockText(id));
 }
 
