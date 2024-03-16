@@ -39,11 +39,13 @@ static void editorBackend(bool scr, float touchX, float touchY){
 			blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
 			struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
 			int loopCount=0;
-			while((*moveBlock).hasAfter){
+			// while((*moveBlock).hasAfter){
+			// jankfix because hasAfter wasnt being set, original bit of code above
+			while(loopCount < 2){
 				loopCount++;
 				moveBlock=(*moveBlock).after;
-				moveBlock->x=touchX+stylusDiffX+40*loopCount;
-				moveBlock->y=touchX+stylusDiffY+40*loopCount;
+				moveBlock->x=touchX+stylusDiffX;
+				moveBlock->y=touchY+stylusDiffY+40*loopCount;
 				// this makes block after the one being dragged get also dragged, but this does nothing?
 			}
 		} else {
