@@ -37,8 +37,27 @@ static void editorBackend(bool scr, float touchX, float touchY){
 		if(touching){
 			blockMatrixDynamic[movingBlockIdx].x=touchX+stylusDiffX;
 			blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
+			struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
+			int loopCount=0;
+			while((*moveBlock).hasAfter){
+				loopCount++;
+				moveBlock=(*moveBlock).after;
+				moveBlock->x=touchX+stylusDiffX+40*loopCount;
+				moveBlock->y=touchX+stylusDiffY+40*loopCount;
+				// this makes block after the one being dragged get also dragged, but this does nothing?
+			}
 		} else {
 			movingBlock=false;
+			for(int i=0;i<blockMatrixSize;i++){
+				if(i!=movingBlockIdx){
+					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)){
+						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
+						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y+40;
+						blockMatrixDynamic[i].after=&blockMatrixDynamic[movingBlockIdx];
+						blockMatrixDynamic[i].hasAfter=true;
+					}
+				}
+			}
 		}
 	} else if(touching) {
 		for(int i=0;i<blockMatrixSize;i++){
@@ -48,6 +67,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 				movingBlock=true;
 				stylusDiffX=blockMatrixDynamic[i].x-touchX;
 				stylusDiffY=blockMatrixDynamic[i].y-touchY;
+				blockMatrixDynamic[i].hasAfter=false;
 				i=100; // the value here does not matter, what's important is that we get out of the loop
 			}
 		}
@@ -91,7 +111,7 @@ static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 		if(blockSelectorScroll>10){blockSelectorScroll=10;};
 		if(blockSelectorScroll<(-50*(104-3.5))){blockSelectorScroll=(-50*(104-3.5));};
 		blockSelectorScrollSpeed+=1;
-		if(blockSelectorScrollSpeed>(60*4)){blockSelectorScrollSpeed=(60*4);}
+		if(blockSelectorScrollSpeed>(60*5)){blockSelectorScrollSpeed=(60*5);}
 	} else {
 		blockSelectorScrollSpeed=0;
 	}

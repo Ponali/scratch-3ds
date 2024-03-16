@@ -4,6 +4,8 @@ typedef struct Block{
 	int id;
 	float x;
 	float y;
+	struct Block *after;
+	bool hasAfter;
 };
 
 
@@ -76,12 +78,12 @@ static void renderBlock(struct Block a){
 	int id=a.id;
 	int bselColorIndex;
 	for (int ii=0;ii<9;ii++) {
-		if (id>=/*blockColor[ii][0]*/getBlockColor(ii,0) && id<=/*blockColor[ii][1]*/getBlockColor(ii,1)){
+		if (id>=getBlockColor(ii,0) && id<=getBlockColor(ii,1)){
 			bselColorIndex=ii;
 			ii=9;
 		}
 	}
-	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,/*blockText[id]*/getBlockText(id));
+	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,getBlockText(id));
 }
 
 static bool blockCollision(struct Block a, float x, float y){
