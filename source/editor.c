@@ -15,15 +15,18 @@ static bool blockSelectorTouchHold=false;
 static bool editorInitiated=false;
 
 static void editorRender(bool scr){
+	if(movingBlock){
+		for(int i=0;i<blockMatrixSize;i++){
+			if(i!=movingBlockIdx){
+				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)){
+					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y+40,0);
+				}
+			}
+		};
+	}
 	for(int i=0;i<blockMatrixSize;i++){
-		/*struct Block currentBlock;
-		currentBlock.id=i;
-		currentBlock.x=i*50;
-		currentBlock.y=i*50;*/
-		//renderBlock(colorArray[i],blockMatrix[i][0],blockMatrix[i][1],"sample block text");
 		renderBlock(blockMatrixDynamic[i]);
 	}
-	
 }
 
 static void editorBackend(bool scr, float touchX, float touchY){
