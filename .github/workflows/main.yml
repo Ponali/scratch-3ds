@@ -35,7 +35,7 @@ jobs:
           draft: false
           prerelease: false
   uploadbin:
-    needs: compile, build
+    needs: [compile, build]
     name: Insert binary files to release
     runs-on: ubuntu-latest
     steps:
