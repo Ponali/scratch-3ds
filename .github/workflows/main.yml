@@ -34,14 +34,14 @@ jobs:
           body: Automatically compiled from a w.i.p. workflow
           draft: false
           prerelease: false
-    uploadbin:
-      needs: compile, build
-      name: Insert binary files to release
-      runs-on: ubuntu-latest
-      steps:
-        - uses: tanyagray/action-upload-release-asset@v1.1.3
-          with:
-            upload_url: steps.create_release.outputs.upload_url
-            asset_path: scratch-3ds.3dsx
-            asset_name: scratch-3ds.3dsx
-            asset_content_type: application/octet-stream
+  uploadbin:
+    needs: compile, build
+    name: Insert binary files to release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tanyagray/action-upload-release-asset@v1.1.3
+        with:
+          upload_url: steps.create_release.outputs.upload_url
+          asset_path: scratch-3ds.3dsx
+          asset_name: scratch-3ds.3dsx
+          asset_content_type: application/octet-stream
