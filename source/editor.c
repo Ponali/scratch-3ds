@@ -25,7 +25,7 @@ static void editorRender(bool scr){
 		};
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
-				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+30)){
+				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)){
 					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y-40,0);
 				}
 			}
