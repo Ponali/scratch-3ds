@@ -34,7 +34,7 @@ jobs:
           body: Automatically compiled from a w.i.p. workflow
           draft: false
           prerelease: false
-    insert:
+    uploadbin:
       needs: compile, build
       name: Insert binary files to release
       runs-on: ubuntu-latest
