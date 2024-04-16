@@ -1,0 +1,47 @@
+on:
+  push # temporary, change to monthly after testing
+
+name: Create Release
+
+jobs:
+  compile:
+    name: Compile using DevkitPro
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install custom pacman command
+        run: |
+         wget https://apt.devkitpro.org/install-devkitpro-pacman
+         chmod +x ./install-devkitpro-pacman
+         sudo ./install-devkitpro-pacman
+      - name: Use custom pacman to get the 3ds package
+        run: sudo (dkp-)pacman -S 3ds-dev
+      - name: Run Makefile to compile
+        run: make
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: Automatically compiled from a w.i.p. workflow
+          draft: false
+          prerelease: false
+    insert:
+      needs: compile, build
+      name: Insert binary files to release
+      runs-on: ubuntu-latest
+      steps:
+        - uses: tanyagray/action-upload-release-asset@v1.1.3
+          with:
+            upload_url: steps.create_release.outputs.upload_url
+            asset_path: scratch-3ds.3dsx
+            asset_name: scratch-3ds.3dsx
+            asset_content_type: application/octet-stream
