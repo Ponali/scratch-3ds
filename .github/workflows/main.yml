@@ -6,13 +6,12 @@ name: Create Release
 jobs:
   compile:
     name: Compile using DevkitPro
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Install custom pacman command
         run: |
-         wget https://apt.devkitpro.org/install-devkitpro-pacman
-         chmod +x ./install-devkitpro-pacman
-         sudo ./install-devkitpro-pacman
+         sudo installer -pkg devkitpro-pacman-installer.pkg -target /
+         xcode-select --install
       - name: Use custom pacman to get the 3ds package
         run: sudo (dkp-)pacman -S 3ds-dev
       - name: Run Makefile to compile
@@ -25,15 +24,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          name: Release ${{ github.ref }}
           body: Automatically compiled from a w.i.p. workflow
-          draft: false
-          prerelease: false
+          draft: true
+          prerelease: true
+          replacesArtifacts: true
   uploadbin:
     needs: [compile, build]
     name: Insert binary files to release
