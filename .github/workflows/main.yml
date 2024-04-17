@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Install custom pacman command
         run: |
-         sudo installer -pkg devkitpro-pacman-installer.pkg -target /
+         sudo installer -pkg https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg -target /
          xcode-select --install
       - name: Use custom pacman to get the 3ds package
         run: sudo (dkp-)pacman -S 3ds-dev
@@ -31,6 +31,7 @@ jobs:
           draft: true
           prerelease: true
           replacesArtifacts: true
+          tag: actionwip
   uploadbin:
     needs: [compile, build]
     name: Insert binary files to release
