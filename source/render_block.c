@@ -52,15 +52,17 @@ static void renderBlockText(float x, float y){
 	C2D_DrawText(&renderBlockTextValue, C2D_WithColor, x, y, 0.0f, 0.5f, 0.5f, C2D_Color32(0xFF,0xFF,0xFF,0xFF));
 }
 
-static void renderBlockShadow(u32 c, float x, float y, int width, bool hat){
+static void renderBlockShadow(u32 c, float x, float y, int width, bool hat, bool end){
 	u32 ltn = C2D_Color32(0xFF, 0xFF, 0xFF, 128);
 	C2D_DrawRectangle(0+x, 0+y+hat*10, 0, 20, 40-hat*10,c,c,c,c);        		// left-most part
 	if(!hat){C2D_DrawTriangle(20+x,0+y,c,35+x,10+y,c,20+x,10+y,c,0);};          // left triangle for top
 	if(!hat){C2D_DrawTriangle(60+x,0+y,c,45+x,10+y,c,60+x,10+y,c,0);};          // right triangle for top
 	C2D_DrawRectangle(20+x, 10+y, 0, 40, 30,c,c,c,c);              		        // fill inside
-	C2D_DrawTriangle(20+x,40+y,c,35+x,50+y,c,35+x,40+y,c,0);       		        // left triangle for bottom
-	C2D_DrawTriangle(60+x,40+y,c,45+x,50+y,c,45+x,40+y,c,0);       		        // right triangle for bottom
-	C2D_DrawRectangle(35+x, 40+y, 0, 10, 10,c,c,c,c);              		        // fill bottom lump
+	if(!end){
+		C2D_DrawTriangle(20+x,40+y,c,35+x,50+y,c,35+x,40+y,c,0);       		    // left triangle for bottom
+		C2D_DrawTriangle(60+x,40+y,c,45+x,50+y,c,45+x,40+y,c,0);       		    // right triangle for bottom
+		C2D_DrawRectangle(35+x, 40+y, 0, 10, 10,c,c,c,c);              		    // fill bottom lump
+	}
 	C2D_DrawRectangle(60+x, 0+y+hat*10, 0, max(width-50,20),40-hat*10,c,c,c,c); // right-most part
 	
 	if(hat){ // top hat circle
@@ -72,11 +74,11 @@ static void renderBlockShadow(u32 c, float x, float y, int width, bool hat){
 	C2D_DrawTriangle(2+x, 2+y, ltn, 15+x, 2+y, ltn, 2+x, 15+y, ltn, 0);	        // drag indicator
 }
 
-static void renderBlockFromProperties(u32 c, float x, float y, char text[], bool hat){
+static void renderBlockFromProperties(u32 c, float x, float y, char text[], bool hat, bool end){
 	float textWidth=0;
 	float textHeight=0;
 	startRenderBlockText(text,&textWidth,&textHeight);
-	renderBlockShadow(c,x,y,textWidth,hat);
+	renderBlockShadow(c,x,y,textWidth,hat,end);
 	renderBlockText(x+6,y+13);
 }
 
@@ -90,7 +92,7 @@ static void renderBlock(struct Block a){
 			ii=9;
 		}
 	};
-	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,getBlockText(id),getBlockHat(id));
+	renderBlockFromProperties(colorArray[bselColorIndex],a.x,a.y,getBlockText(id),getBlockHat(id),getBlockEnd(id));
 }
 
 static bool blockCollision(struct Block a, float x, float y){
