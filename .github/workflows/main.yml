@@ -10,8 +10,8 @@ jobs:
     steps:
       - name: Install custom pacman command
         run: |
-         curl -o ./devkitpro-pacman-installer.pkg https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg
-         sudo installer -pkg devkitpro-pacman-installer.pkg -target /
+         curl -o ./devkitpropacman.pkg https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg
+         sudo installer -pkg devkitpropacman.pkg -target /
          xcode-select --install
       - name: Use custom pacman to get the 3ds package
         run: sudo (dkp-)pacman -S 3ds-dev
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Create Release
         id: create_release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.14.0
         with:
           name: Release ${{ github.ref }}
           body: Automatically compiled from a w.i.p. workflow
