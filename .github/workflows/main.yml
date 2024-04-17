@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Install custom pacman command
         run: |
-         curl -o ./devkitpropacman.pkg https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg
+         curl -o devkitpropacman.pkg https://github.com/devkitPro/pacman/releases/download/v6.0.2/devkitpro-pacman-installer.pkg
          sudo installer -pkg devkitpropacman.pkg -target /
          xcode-select --install
       - name: Use custom pacman to get the 3ds package
