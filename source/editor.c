@@ -5,7 +5,7 @@ static float stylusDiffX = 0;
 static float stylusDiffY = 0;
 static bool movingBlock = false;
 static int movingBlockIdx = 0;
-static struct Block blockMatrix[2]={{0,0,0},{1,50,50}};
+static struct Block blockMatrix[2]={{0,0,0},{1,50,100}};
 static int blockMatrixSize=2;
 static struct Block* blockMatrixDynamic;
 // static int blockMatrix[2][4] = {{0,0,0,0},{50,50,0,0}}; 3rd entry would be block index
@@ -19,14 +19,14 @@ static void editorRender(bool scr){
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
 				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)){
-					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y+40,0);
+					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y+40,0,getBlockHat(blockMatrixDynamic[movingBlockIdx].id));
 				}
 			}
 		};
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
-				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)){
-					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y-40,0);
+				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))){
+					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y-40,0,false);
 				}
 			}
 		};
@@ -85,7 +85,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 			}
 			for(int i=0;i<blockMatrixSize;i++){
 				if(i!=movingBlockIdx){
-					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)){
+					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))){
 						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
 						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y-40;
 						blockMatrixDynamic[movingBlockIdx].after=&blockMatrixDynamic[i];

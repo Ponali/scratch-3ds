@@ -1,3 +1,4 @@
+#include <stdbool.h>
 static int blockColor[10][2] = {{0,17},{18,37},{38,46},{47,54},{55,65},{66,83},{84,101},{102,106},{107,107}};
 static char blockText[105][36] =
 {"move 10 steps",
@@ -108,5 +109,7 @@ static char blockText[105][36] =
 "show variable my variable",
 "hide variable my variable",
 "placeholder block"};
+static bool blockProperty[105]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 static int getBlockColor(int idxA,int idxB){return blockColor[idxA][idxB];};
 static char* getBlockText(int idx){return blockText[idx];};
+static bool getBlockHat(int idx){return blockProperty[idx];};
