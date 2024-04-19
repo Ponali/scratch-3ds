@@ -18,14 +18,14 @@ static void editorRender(bool scr){
 	if(movingBlock){
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
-				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))){
+				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y+40,0,false,getBlockEnd(blockMatrixDynamic[movingBlockIdx].id),false);
 				}
 			}
 		};
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
-				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))){
+				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y-40,0,getBlockHat(blockMatrixDynamic[movingBlockIdx].id),false,false);
 				}
 			}
@@ -64,7 +64,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 			movingBlock=false;
 			for(int i=0;i<blockMatrixSize;i++){
 				if(i!=movingBlockIdx){
-					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))){
+					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
 						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y+40;
 						struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
@@ -85,7 +85,7 @@ static void editorBackend(bool scr, float touchX, float touchY){
 			}
 			for(int i=0;i<blockMatrixSize;i++){
 				if(i!=movingBlockIdx){
-					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))){
+					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
 						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y-40;
 						blockMatrixDynamic[movingBlockIdx].after=&blockMatrixDynamic[i];
