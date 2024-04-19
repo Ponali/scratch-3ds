@@ -13,8 +13,11 @@ static float blockSelectorScroll = 10.0f;
 static int blockSelectorScrollSpeed= 0;
 static bool blockSelectorTouchHold=false;
 static bool editorInitiated=false;
+static float editorX=0;
+static float editorY=0;
 
 static void editorRender(bool scr){
+	setBlockRenderingOffset(editorX,editorY);
 	if(movingBlock){
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
@@ -36,11 +39,17 @@ static void editorRender(bool scr){
 	}
 }
 
-static void editorBackend(bool scr, float touchX, float touchY){
+static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY){
 	if(!editorInitiated){
 		blockMatrixDynamic = (int*)calloc(blockMatrixSize,sizeof(struct Block));
 		memcpy(blockMatrixDynamic,blockMatrix,sizeof(blockMatrix));
 		editorInitiated=true;
+	}
+	editorX-=((float)cStickX)/24;
+	editorY+=((float)cStickY)/24;
+	if(!(touchX==0.0f&&touchY==0.0f)){
+		touchX-=editorX;
+		touchY-=editorY;
 	}
 	bool touching=((touchX+touchY)!=0);
 	if(movingBlock){
@@ -129,6 +138,7 @@ static void insertBlockFromSelector(int id){
 }
 
 static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
+	setBlockRenderingOffset(0.0f,0.0f);
 	if(blockSelectorTouchHold&&(touchX+touchY==0)){blockSelectorTouchHold=false;}
 	u32 colorArray[10] = {motion_tab_color,looks_tab_color,sound_tab_color,events_tab_color,control_tab_color,sensing_tab_color,operators_tab_color,variables_tab_color,my_blocks_tab_color,extension_tab_color};
 	bool touchedBlock=false;

@@ -35,22 +35,25 @@ int main(int argc, char* argv[]) {
 		touchPosition touch;
 		hidTouchRead(&touch);
 		
+		circlePosition circlePos;
+		hidCircleRead(&circlePos);
+
 		circlePosition cStickPos;
-		hidCircleRead(&cStickPos);
+		irrstCstickRead(&cStickPos);
 
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 
 		C2D_TargetClear(bot, clear_color);
 		C2D_SceneBegin(bot);
 
-		renderScreen(kHeld,false,touch.px,touch.py,cStickPos.dx,cStickPos.dy,bsel,kDown);
+		renderScreen(kHeld,false,touch.px,touch.py,circlePos.dx,circlePos.dy,bsel,kDown,cStickPos.dx,cStickPos.dy);
 		
 		C2D_Flush();
 		
 		C2D_TargetClear(top, clear_color);
 		C2D_SceneBegin(top);
 		
-		renderScreen(kHeld,true,touch.px,touch.py,cStickPos.dx,cStickPos.dy,bsel,kDown);
+		renderScreen(kHeld,true,touch.px,touch.py,circlePos.dx,circlePos.dy,bsel,kDown,cStickPos.dx,cStickPos.dy);
 
 		C2D_Flush();
 		C3D_FrameEnd(0);

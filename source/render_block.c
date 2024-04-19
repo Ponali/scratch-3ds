@@ -25,6 +25,9 @@ static u32 variables_tab_color;
 static u32 my_blocks_tab_color;
 static u32 extension_tab_color;
 
+static float renderOffsetX=0;
+static float renderOffsetY=0;
+
 static void initBlockRendering(){
 	renderBlockFont=C2D_FontLoad("romfs:/font.bcfnt");
 	renderBlockBuf=C2D_TextBufNew(4096);
@@ -41,6 +44,11 @@ static void initBlockRendering(){
 	//memcpy(_blockColor,blockColorImport,sizeof(_blockColor));
 }
 
+static void setBlockRenderingOffset(float x, float y){
+	renderOffsetX=x;
+	renderOffsetY=y;
+}
+
 static void startRenderBlockText(char text[], u32 outWidth, u32 outHeight){
 	C2D_TextBufClear(renderBlockBuf);
 	C2D_TextFontParse(&renderBlockTextValue, renderBlockFont, renderBlockBuf, text);
@@ -53,6 +61,8 @@ static void renderBlockText(float x, float y){
 }
 
 static void renderBlockShadow(u32 c, float x, float y, int width, bool hat, bool end, bool rep){
+	x+=renderOffsetX;
+	y+=renderOffsetY;
 	u32 ltn = C2D_Color32(0xFF, 0xFF, 0xFF, 128);
 	
 	if(!rep){
@@ -86,7 +96,7 @@ static void renderBlockFromProperties(u32 c, float x, float y, char text[], bool
 	float textHeight=0;
 	startRenderBlockText(text,&textWidth,&textHeight);
 	renderBlockShadow(c,x,y,textWidth,hat,end,reporter);
-	renderBlockText(x+6,y+13);
+	renderBlockText(x+6+renderOffsetX,y+13+renderOffsetY);
 }
 
 static void renderBlock(struct Block a){

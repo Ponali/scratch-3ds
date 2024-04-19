@@ -4,9 +4,9 @@ static bool screenSwap=true;
 static float cursorX=50;
 static float cursorY=50;
 
-static void updateCursor(s16 cStickX, s16 cStickY){
-	cursorX+=cStickX/24;
-	cursorY-=cStickY/24;
+static void updateCursor(s16 circleX, s16 circleY){
+	cursorX+=circleX/24;
+	cursorY-=circleY/24;
 	if(cursorX<0){cursorX=0;}
 	if(cursorY<0){cursorY=0;}
 	if(cursorX>400){cursorX=400;}
@@ -19,11 +19,11 @@ static void renderCursor(float cursorX, float cursorY, bool pressedA){
 	C2D_DrawTriangle(cursorX+0,cursorY+0,c,cursorX+15,cursorY+0,c,cursorX+0,cursorY+15,c,0);
 }
 
-static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY, bool bsel, u32 kDown){
+static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 circleX, s16 circleY, bool bsel, u32 kDown, s16 cStickX, s16 cStickY){
 	bool pressedA=false;if(kHeld&KEY_A){pressedA=true;}
 	float useX=touchX;float useY=touchY;
 	if(scr){
-		updateCursor(cStickX,cStickY);
+		updateCursor(circleX,circleY);
 		if(pressedA){
 			useX=cursorX;
 			useY=cursorY;
@@ -32,7 +32,7 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 cS
 		}
 	}
 	if(scr^screenSwap){
-		editorBackend(scr,useX,useY);
+		editorBackend(scr,useX,useY,cStickX,cStickY);
 	} else {
 		if (bsel){
 			blockSelector(scr,kDown,useX,useY);
