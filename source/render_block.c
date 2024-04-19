@@ -74,9 +74,10 @@ static void renderBlockShadow(u32 c, float x, float y, int width, bool hat, bool
 
 		C2D_DrawTriangle(2+x, 2+y, ltn, 15+x, 2+y, ltn, 2+x, 15+y, ltn, 0);	        // drag indicator
 	} else {
-		C2D_DrawCircle(x+10,y+10,0,10,c,c,c,c);
-		C2D_DrawRectangle(x+10,y,0,20,width,c,c,c,c);
-		C2D_DrawCircle(x+10+width,y+10,0,10,c,c,c,c);
+		width-=10;
+		C2D_DrawCircle(x+10,y+20,0,15,c,c,c,c);
+		C2D_DrawRectangle(x+10,y+5,0,width,30,c,c,c,c);
+		C2D_DrawCircle(x+10+width,y+20,0,15,c,c,c,c);
 	}
 }
 
