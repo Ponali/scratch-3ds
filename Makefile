@@ -40,8 +40,8 @@ GRAPHICS	:=	gfx
 ROMFS		:=	romfs
 GFXBUILD	:=	$(ROMFS)
 #GFXBUILD	:=	$(ROMFS)/gfx
-APP_TITLE   :=  Scratch 3DS
-APP_DESCRIPTION := A work-in-progress homebrew application for recreating the scratch client for the Nintendo 3DS architecture.
+APP_TITLE   :=  Scratch for 3DS
+APP_DESCRIPTION := A W.I.P. Scratch recreation for the 3DS.
 APP_AUTHOR  :=  Made by Ponali and Wahlolly
 
 #---------------------------------------------------------------------------------
