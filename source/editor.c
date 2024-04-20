@@ -169,7 +169,7 @@ static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 		}
 	}
 	if((touchX+touchY!=0)&&(!touchedBlock)){
-		blockSelectorScroll-=((touchY-120)/30)*(blockSelectorScrollSpeed/60+1);
+		blockSelectorScroll-=((touchY-120)/30)*(((float)blockSelectorScrollSpeed)/50+1);
 		if(blockSelectorScroll>10){blockSelectorScroll=10;};
 		if(blockSelectorScroll<(-50*(104-3.5))){blockSelectorScroll=(-50*(104-3.5));};
 		blockSelectorScrollSpeed+=1;
