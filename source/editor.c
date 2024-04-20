@@ -3,8 +3,9 @@
 
 static float stylusDiffX = 0;
 static float stylusDiffY = 0;
-static bool movingBlock = false;
+static bool currentlyMoving = false;
 static int movingBlockIdx = 0;
+static bool movingBlock=false;
 static struct Block blockMatrix[2]={{0,0,0},{1,50,100}};
 static int blockMatrixSize=2;
 static struct Block* blockMatrixDynamic;
@@ -18,7 +19,7 @@ static float editorY=0;
 
 static void editorRender(bool scr){
 	setBlockRenderingOffset(editorX,editorY);
-	if(movingBlock){
+	if(currentlyMoving){
 		for(int i=0;i<blockMatrixSize;i++){
 			if(i!=movingBlockIdx){
 				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
@@ -52,63 +53,74 @@ static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16
 		touchY-=editorY;
 	}
 	bool touching=((touchX+touchY)!=0);
-	if(movingBlock){
-		if(touching){
-			blockMatrixDynamic[movingBlockIdx].x=touchX+stylusDiffX;
-			blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
-			int loopCount=0;
-			//while((*moveBlock).hasAfter){
-			// jankfix because hasAfter wasnt being set, original bit of code above
-			struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
-			while(loopCount < blockMatrixSize){
-				loopCount++;
-				if((*moveBlock).hasAfter){
-					moveBlock=(*moveBlock).after;
-					moveBlock->x=touchX+stylusDiffX;
-					moveBlock->y=touchY+stylusDiffY+40*loopCount;
+	if(currentlyMoving){
+		if(movingBlock){
+			if(touching){
+				blockMatrixDynamic[movingBlockIdx].x=touchX+stylusDiffX;
+				blockMatrixDynamic[movingBlockIdx].y=touchY+stylusDiffY;
+				int loopCount=0;
+				//while((*moveBlock).hasAfter){
+				// jankfix because hasAfter wasnt being set, original bit of code above
+				struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
+				while(loopCount < blockMatrixSize){
+					loopCount++;
+					if((*moveBlock).hasAfter){
+						moveBlock=(*moveBlock).after;
+						moveBlock->x=touchX+stylusDiffX;
+						moveBlock->y=touchY+stylusDiffY+40*loopCount;
+					}
+					// this makes block after the one being dragged get also dragged, but this does nothing?
 				}
-				// this makes block after the one being dragged get also dragged, but this does nothing?
-			}
-		} else {
-			movingBlock=false;
-			for(int i=0;i<blockMatrixSize;i++){
-				if(i!=movingBlockIdx){
-					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
-						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
-						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y+40;
-						struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
-						int loopCount=0;
-						while(loopCount < blockMatrixSize){
-							loopCount++;
-							if((*moveBlock).hasAfter){
-								moveBlock=(*moveBlock).after;
-								moveBlock->x=blockMatrixDynamic[i].x;
-								moveBlock->y=blockMatrixDynamic[i].y+40+40*loopCount;
+			} else {
+				currentlyMoving=false;
+				for(int i=0;i<blockMatrixSize;i++){
+					if(i!=movingBlockIdx){
+						if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
+							blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
+							blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y+40;
+							struct Block *moveBlock=&blockMatrixDynamic[movingBlockIdx];
+							int loopCount=0;
+							while(loopCount < blockMatrixSize){
+								loopCount++;
+								if((*moveBlock).hasAfter){
+									moveBlock=(*moveBlock).after;
+									moveBlock->x=blockMatrixDynamic[i].x;
+									moveBlock->y=blockMatrixDynamic[i].y+40+40*loopCount;
+								}
+								// this makes block after the one being dragged get also dragged, but this does nothing?
 							}
-							// this makes block after the one being dragged get also dragged, but this does nothing?
+							blockMatrixDynamic[i].after=&blockMatrixDynamic[movingBlockIdx];
+							blockMatrixDynamic[i].hasAfter=true;
 						}
-						blockMatrixDynamic[i].after=&blockMatrixDynamic[movingBlockIdx];
-						blockMatrixDynamic[i].hasAfter=true;
 					}
 				}
+				for(int i=0;i<blockMatrixSize;i++){
+					if(i!=movingBlockIdx){
+						if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
+							blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
+							blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y-40;
+							blockMatrixDynamic[movingBlockIdx].after=&blockMatrixDynamic[i];
+							blockMatrixDynamic[movingBlockIdx].hasAfter=true;
+						}
+					}
+				};
 			}
-			for(int i=0;i<blockMatrixSize;i++){
-				if(i!=movingBlockIdx){
-					if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
-						blockMatrixDynamic[movingBlockIdx].x=blockMatrixDynamic[i].x;
-						blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y-40;
-						blockMatrixDynamic[movingBlockIdx].after=&blockMatrixDynamic[i];
-						blockMatrixDynamic[movingBlockIdx].hasAfter=true;
-					}
-				}
-			};
+		} else if(touching) {
+			editorX+=touchX-stylusDiffX;
+			editorY+=touchY-stylusDiffY;
+		} else {
+			currentlyMoving=false;
 		}
 	} else if(touching) {
+		movingBlock=false;
+		stylusDiffX=touchX;
+		stylusDiffY=touchY;
+		currentlyMoving=true;
 		for(int i=0;i<blockMatrixSize;i++){
 			if(blockCollision(blockMatrixDynamic[i],touchX,touchY)){
 			//if(touchX<blockMatrix[i].x+30 && touchX>blockMatrix[i].x && touchY<blockMatrix[i].y+30 && touchY>blockMatrix[i].y/* && blockMatrix[i][3]==0*/){
-				movingBlockIdx=i;
 				movingBlock=true;
+				movingBlockIdx=i;
 				stylusDiffX=blockMatrixDynamic[i].x-touchX;
 				stylusDiffY=blockMatrixDynamic[i].y-touchY;
 				//blockMatrixDynamic[i].hasAfter=false;
@@ -117,7 +129,7 @@ static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16
 						blockMatrixDynamic[j].hasAfter=false;
 					}
 				}
-				i=100; // the value here does not matter, what's important is that we get out of the loop
+				i=blockMatrixSize; // the value here does not matter, what's important is that we get out of the loop
 			}
 		}
 	}
