@@ -1,6 +1,6 @@
-![logo](icon-large.png)
+<h1 align="center"><img src="icon-large.png" style="width: 30%;"></img><br>Scratch for 3DS</h1>
 
-# Scratch for 3DS
+## Introduction
 Scratch for 3DS is a project started and created by [Ponali](https://github.com/Ponali) and [Wahlolly](https://github.com/TheWahlolly), based around the children's programming language, [Scratch](https://scratch.mit.edu/), and recreates it to be used on any kind of Nintendo 3DS system.
 This project is currently in work-in-progress however, so bugs may occur.
 
