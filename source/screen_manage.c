@@ -39,6 +39,7 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 		} else {
 			// temporary triangle
 			C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
+			controlsElement(scr,"\uE002: Block selector");
 		}
 	}
 	if(scr){
