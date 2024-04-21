@@ -127,6 +127,7 @@ static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16
 							}
 							blockMatrixDynamic[i].after=&blockMatrixDynamic[movingBlockIdx];
 							blockMatrixDynamic[i].hasAfter=true;
+							i=blockMatrixSize;
 						}
 					}
 				}
@@ -137,6 +138,8 @@ static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16
 							blockMatrixDynamic[movingBlockIdx].y=blockMatrixDynamic[i].y-40;
 							blockMatrixDynamic[movingBlockIdx].after=&blockMatrixDynamic[i];
 							blockMatrixDynamic[movingBlockIdx].hasAfter=true;
+
+							i=blockMatrixSize;
 						}
 					}
 				};
