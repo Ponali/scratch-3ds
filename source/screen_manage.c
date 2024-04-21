@@ -31,6 +31,12 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 			useX=0.0f;useY=0.0f;
 		}
 	}
+	if(scr){
+		buttonPrompt(scr,"\uE000: Click",1);
+		buttonPrompt(scr,"\uE050: Move cursor",3);
+	} else {
+		buttonPrompt(scr,"\uE054: Swap screens",1);
+	}
 	if(scr^screenSwap){
 		editorBackend(scr,useX,useY,cStickX,cStickY);
 	} else {
@@ -39,7 +45,7 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 		} else {
 			// temporary triangle
 			C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
-			controlsElement(scr,"\uE002: Block selector");
+			buttonPrompt(scr,"\uE002: Block selector",0);
 		}
 	}
 	if(scr){

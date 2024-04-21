@@ -36,14 +36,18 @@ static void roundRectangle(float x,float y,float w,float h,float rnd,bool round[
 	circleOrSquare(x+w-rnd,y+h-rnd,rnd,round[3],c);
 }
 
-static void controlsElement(bool scr, char text[]){
+static void buttonPrompt(bool scr, char text[], int side){
+	int screenWidth = 320+80*(int)scr;
+	bool sideX=(side%2)==1;
+	bool sideY=!(side/2);
 	float textWidth=0;
 	float textHeight=0;
 	startRenderBlockText(text,&textWidth,&textHeight);
 	u32 c=C2D_Color32(140,140,140,255);
-	bool round[4]={true,true,false,true};
-	roundRectangle(0,240-20,textWidth+8,20,8,round,c);
-	renderBlockText(4,222);
+	bool round[4]={true,true,true,true};
+	round[(!sideY)+(!sideX)*2]=false;
+	roundRectangle((screenWidth-textWidth-4*2)*sideX,(240-20)*sideY,textWidth+8,20,8,round,c);
+	renderBlockText(4+(screenWidth-textWidth-4*2)*sideX,220*sideY+2);
 }
 
 static void editorRender(bool scr){
@@ -67,7 +71,7 @@ static void editorRender(bool scr){
 	for(int i=0;i<blockMatrixSize;i++){
 		renderBlock(blockMatrixDynamic[i]);
 	}
-	controlsElement(scr,"C-Stick: Move camera / \uE054: Swap screens");
+	buttonPrompt(scr,"\uE051: Move camera",0);
 }
 
 static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY){
@@ -208,4 +212,6 @@ static void blockSelector(bool scr, u32 kDown, float touchX, float touchY){
 		blockSelectorScrollSpeed=0;
 	}
 	if((!blockSelectorTouchHold)&&(touchX+touchY!=0)){blockSelectorTouchHold=true;}
+
+	buttonPrompt(scr,"\uE002: Project player",0);
 }
