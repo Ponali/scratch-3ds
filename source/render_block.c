@@ -78,8 +78,8 @@ static void renderBlockShadow(u32 c, float x, float y, int width, bool hat, bool
 		C2D_DrawRectangle(60+x, 0+y+hat*10, 0, max(width-50,20),40-hat*10,c,c,c,c); // right-most part
 		
 		if(hat){ // top hat circle
-			C2D_DrawEllipse(0+x,y-5,0,max(width,20+50)+10,10,c,c,c,c);
-			C2D_DrawRectangle(0+x,0+y,0,max(width,20+50)+10,10,c,c,c,c);
+			C2D_DrawEllipse(0+x,y-5,0,80,20,c,c,c,c);
+			C2D_DrawRectangle(0+x,6+y,0,max(width,20+50)+10,4,c,c,c,c);
 		}
 
 		C2D_DrawTriangle(2+x, 2+y, ltn, 15+x, 2+y, ltn, 2+x, 15+y, ltn, 0);	        // drag indicator
