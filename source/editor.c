@@ -57,6 +57,7 @@ static void editorRender(bool scr){
 			if(i!=movingBlockIdx){
 				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y-30)&&(!getBlockHat(blockMatrixDynamic[movingBlockIdx].id))&&(!getBlockEnd(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y+40,0,false,getBlockEnd(blockMatrixDynamic[movingBlockIdx].id),false);
+					i=blockMatrixSize;
 				}
 			}
 		};
@@ -64,6 +65,7 @@ static void editorRender(bool scr){
 			if(i!=movingBlockIdx){
 				if(blockCollision(blockMatrixDynamic[i],blockMatrixDynamic[movingBlockIdx].x+10,blockMatrixDynamic[movingBlockIdx].y+55)&&(!getBlockHat(blockMatrixDynamic[i].id))&&(!getBlockEnd(blockMatrixDynamic[movingBlockIdx].id))&&(!getReporter(blockMatrixDynamic[i].id))&&(!getReporter(blockMatrixDynamic[movingBlockIdx].id))){
 					renderBlockShadow(C2D_Color32(128,128,128,128),blockMatrixDynamic[i].x,blockMatrixDynamic[i].y-40,0,getBlockHat(blockMatrixDynamic[movingBlockIdx].id),false,false);
+					i=blockMatrixSize;
 				}
 			}
 		};
@@ -139,7 +141,7 @@ static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16
 					}
 				};
 			}
-		} else if(touching) {
+		} else if(touching&&(!movingBlock)) {
 			editorX+=touchX-stylusDiffX;
 			editorY+=touchY-stylusDiffY;
 		} else {
