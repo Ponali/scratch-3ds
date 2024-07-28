@@ -1,7 +1,7 @@
 #include <citro2d.h>
 #include <math.h>
 
-static initframe=true;
+static bool initframe=true;
 
 static C2D_Sprite sprite;
 static C2D_SpriteSheet sillySheet;

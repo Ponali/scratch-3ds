@@ -79,7 +79,9 @@ static void editorRender(bool scr){
 
 static void editorBackend(bool scr, float touchX, float touchY, s16 cStickX, s16 cStickY){
 	if(!editorInitiated){
-		blockMatrixDynamic = (int*)calloc(blockMatrixSize,sizeof(struct Block));
+		//possibly unstable change in next line. original line:
+		//blockMatrixDynamic = (int*)calloc(blockMatrixSize,sizeof(struct Block));
+		blockMatrixDynamic = (struct Block*)calloc(blockMatrixSize,sizeof(struct Block));
 		memcpy(blockMatrixDynamic,blockMatrix,sizeof(blockMatrix));
 		editorInitiated=true;
 	}
