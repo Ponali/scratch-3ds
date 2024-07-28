@@ -9,6 +9,7 @@ float min(float a,float b){return a<b?a:b;};
 bool bsel = false;
 
 int main(int argc, char* argv[]) {
+	romfsInit();
 	gfxInitDefault();
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
 	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
