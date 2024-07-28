@@ -17,7 +17,7 @@ static bool editorInitiated=false;
 static float editorX=0;
 static float editorY=0;
 
-static circleOrSquare(float x,float y,float rad,bool sq,u32 c){
+static void circleOrSquare(float x,float y,float rad,bool sq,u32 c){
 	if(!sq){
 		C2D_DrawCircle(x,y,0,rad,c,c,c,c);
 	} else {
@@ -27,7 +27,7 @@ static circleOrSquare(float x,float y,float rad,bool sq,u32 c){
 
 static void roundRectangle(float x,float y,float w,float h,float rnd,bool round[4],u32 c){
 	// rnd = roundness
-	rnd=min(rnd,h/2);
+	rnd=fminf(rnd,h/2);
 	C2D_DrawRectangle(x+rnd,y,0,w-rnd*2,h,c,c,c,c);
 	C2D_DrawRectangle(x,y+rnd,0,w,h-rnd*2,c,c,c,c);
 	circleOrSquare(x+rnd,y+rnd,rnd,round[0],c);

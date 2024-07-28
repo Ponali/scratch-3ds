@@ -1,9 +1,14 @@
+/*
 float max(float a,float b){return a>b?a:b;};
 float min(float a,float b){return a<b?a:b;};
+let's not redefine max and min functions in fmaxf and fminf exist
+*/
 
 #include <citro2d.h>
 #include <3ds.h>
 #include "screen_manage.c"
+#include <stdlib.h>
+#include <math.h>
 
 bool bsel = false;
 

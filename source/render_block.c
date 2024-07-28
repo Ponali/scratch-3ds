@@ -49,11 +49,11 @@ static void setBlockRenderingOffset(float x, float y){
 	renderOffsetY=y;
 }
 
-static void startRenderBlockText(char text[], u32 outWidth, u32 outHeight){
+static void startRenderBlockText(char text[], float* outWidth, float* outHeight){
 	C2D_TextBufClear(renderBlockBuf);
 	C2D_TextFontParse(&renderBlockTextValue, renderBlockFont, renderBlockBuf, text);
 	C2D_TextOptimize(&renderBlockTextValue);
-	C2D_TextGetDimensions(&renderBlockTextValue,0.5f,0.5f,outWidth,outHeight);
+	C2D_TextGetDimensions(&renderBlockTextValue,0.5f,0.5f,&outWidth,&outHeight);
 }
 
 static void renderBlockText(float x, float y){
@@ -75,11 +75,11 @@ static void renderBlockShadow(u32 c, float x, float y, int width, bool hat, bool
 			C2D_DrawTriangle(60+x,40+y,c,45+x,50+y,c,45+x,40+y,c,0);       		    // right triangle for bottom
 			C2D_DrawRectangle(35+x, 40+y, 0, 10, 10,c,c,c,c);              		    // fill bottom lump
 		}
-		C2D_DrawRectangle(60+x, 0+y+hat*10, 0, max(width-50,20),40-hat*10,c,c,c,c); // right-most part
+		C2D_DrawRectangle(60+x, 0+y+hat*10, 0, fmaxf(width-50,20),40-hat*10,c,c,c,c); // right-most part
 		
 		if(hat){ // top hat circle
 			C2D_DrawEllipse(0+x,y-5,0,80,20,c,c,c,c);
-			C2D_DrawRectangle(0+x,6+y,0,max(width,20+50)+10,4,c,c,c,c);
+			C2D_DrawRectangle(0+x,6+y,0,fmaxf(width,20+50)+10,4,c,c,c,c);
 		}
 
 		C2D_DrawTriangle(2+x, 2+y, ltn, 15+x, 2+y, ltn, 2+x, 15+y, ltn, 0);	        // drag indicator
