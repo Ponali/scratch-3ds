@@ -1,4 +1,5 @@
 #include <citro2d.h>
+#include "block_data.c"
 
 typedef struct Block{
 	int id;
