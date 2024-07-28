@@ -1,8 +1,10 @@
 #include "editor.c"
+//#include "interpreter.c"
 
 static bool screenSwap=true;
 static float cursorX=50;
 static float cursorY=50;
+static bool firstframe=true;
 
 static void updateCursor(s16 circleX, s16 circleY){
 	cursorX+=circleX/24;
@@ -20,6 +22,13 @@ static void renderCursor(float cursorX, float cursorY, bool pressedA){
 }
 
 static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 circleX, s16 circleY, bool bsel, u32 kDown, s16 cStickX, s16 cStickY){
+	C2D_Sprite spriteroni;												// TEMPORARY CODE! Remove once interpreter.c works!
+	C2D_SpriteSheet sillySheet;											// TEMPORARY CODE! Remove once interpreter.c works!
+	if(firstframe==true){												// TEMPORARY CODE! Remove once interpreter.c works!
+		firstframe=false;												// TEMPORARY CODE! Remove once interpreter.c works!
+		sillySheet = C2D_SpriteSheetLoad("romfs:/gfx/sprites.t3x");		// TEMPORARY CODE! Remove once interpreter.c works!
+		C2D_SpriteFromSheet(&spriteroni, sillySheet, 0); 				// TEMPORARY CODE! Remove once interpreter.c works!
+	}																	// TEMPORARY CODE! Remove once interpreter.c works!
 	bool pressedA=false;if(kHeld&KEY_A){pressedA=true;}
 	float useX=touchX;float useY=touchY;
 	if(scr){
@@ -31,7 +40,7 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 			useX=0.0f;useY=0.0f;
 		}
 	}
-	if(scr){
+	if(scr){	//these could probably be merged
 		buttonPrompt(scr,"\uE000: Click",1);
 		buttonPrompt(scr,"\uE050: Move cursor",3);
 	} else {
@@ -50,6 +59,8 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 	}
 	if(scr){
 		renderCursor(cursorX,cursorY,pressedA);
+		C2D_DrawSprite(&spriteroni);									// TEMPORARY CODE! Remove once interpreter.c works!
+		C2D_SpriteSetPos(&spriteroni, 180.0f, 120.0f);
 	}
 }
 

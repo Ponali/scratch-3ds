@@ -4,6 +4,7 @@ float min(float a,float b){return a<b?a:b;};
 #include <citro2d.h>
 #include <3ds.h>
 #include "screen_manage.c"
+//#include "interpreter.c"
 
 bool bsel = false;
 
@@ -17,6 +18,7 @@ int main(int argc, char* argv[]) {
 	C3D_RenderTarget* bot = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
 	initBlockRendering();
+	//initProject();
 	
 	u32 clear_color = C2D_Color32f(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -54,6 +56,7 @@ int main(int argc, char* argv[]) {
 		C2D_SceneBegin(top);
 		
 		renderScreen(kHeld,true,touch.px,touch.py,circlePos.dx,circlePos.dy,bsel,kDown,cStickPos.dx,cStickPos.dy);
+		//renderProject();
 
 		C2D_Flush();
 		C3D_FrameEnd(0);
