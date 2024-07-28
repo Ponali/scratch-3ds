@@ -53,7 +53,7 @@ static void startRenderBlockText(char text[], float* outWidth, float* outHeight)
 	C2D_TextBufClear(renderBlockBuf);
 	C2D_TextFontParse(&renderBlockTextValue, renderBlockFont, renderBlockBuf, text);
 	C2D_TextOptimize(&renderBlockTextValue);
-	C2D_TextGetDimensions(&renderBlockTextValue,0.5f,0.5f,&outWidth,&outHeight);
+	C2D_TextGetDimensions(&renderBlockTextValue,0.5f,0.5f,outWidth,outHeight);
 }
 
 static void renderBlockText(float x, float y){
