@@ -7,8 +7,7 @@ let's not redefine max and min functions in fmaxf and fminf exist
 #include <citro2d.h>
 #include <3ds.h>
 #include "screen_manage.c"
-#include <stdlib.h>
-#include <math.h>
+//#include <math.h> not needed as it is already being imported in interpreter.c
 
 bool bsel = false;
 

@@ -1,5 +1,6 @@
 #include "block_data.c"
 #include "render_block.c"
+#include <stdlib.h>
 
 static float stylusDiffX = 0;
 static float stylusDiffY = 0;
