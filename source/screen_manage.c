@@ -1,4 +1,4 @@
-#include "editor.c"
+//#include "editor.c"
 #include "interpreter.c"
 
 static bool screenSwap=true;

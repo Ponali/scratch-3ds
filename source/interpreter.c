@@ -1,6 +1,8 @@
 #include <citro2d.h>
 #include <math.h>
-#include "globals.c"
+#include <stdlib.h>
+//#include "globals.c"
+#include "editor.c"
 
 static bool initframe=true;
 
@@ -44,14 +46,6 @@ static void startProject(){
 		srand(rand());
 	for(int i=0;i<(rand()%32)+16;i++)
 		rand();
-}
-
-static void projectTick(){
-	// must be ran 30 times per second (every 2 frames)
-	for(int i=0;i<runtimeBlocksSize;i++){
-		runBlock(runtimeBlocks[i].id);
-		runtimeBlocks[i]=(*runtimeBlocks[i].after)
-	}
 }
 
 static void projectFrame(bool scr, u32 kDown) {
@@ -103,5 +97,13 @@ static void runBlock(int blockID) {
 			spriteX=0;
 			spriteY=0;
 			break;
+	}
+}
+
+static void projectTick(){
+	// must be ran 30 times per second (every 2 frames)
+	for(int i=0;i<runtimeBlocksSize;i++){
+		runBlock(runtimeBlocks[i].id);
+		runtimeBlocks[i]=(*runtimeBlocks[i].after);
 	}
 }

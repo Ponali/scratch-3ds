@@ -1,6 +1,6 @@
 #include "render_block.c"
 #include <stdlib.h>
-#include "globals.c"
+//#include "globals.c"
 
 static float stylusDiffX = 0;
 static float stylusDiffY = 0;

@@ -2,7 +2,6 @@
 #include "block_data.c"
 #include "globals.c"
 
-
 static C2D_Font renderBlockFont;
 static C2D_TextBuf renderBlockBuf;
 static C2D_Text renderBlockTextValue;

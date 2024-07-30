@@ -1,3 +1,4 @@
+#include <stdbool.h>
 typedef struct Block{
 	int id;
 	float x;
