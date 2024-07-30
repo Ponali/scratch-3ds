@@ -1,13 +1,6 @@
 #include <citro2d.h>
 #include "block_data.c"
-
-typedef struct Block{
-	int id;
-	float x;
-	float y;
-	struct Block *after;
-	bool hasAfter;
-};
+#include "globals.c"
 
 
 static C2D_Font renderBlockFont;
