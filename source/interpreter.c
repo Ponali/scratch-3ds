@@ -51,19 +51,19 @@ static void startProject(){
 
 static void runBlock(int blockID) {
 	switch(blockID) {
-		case 1:
-			spriteX=spriteX+sin(spriteRot)*10;
-			spriteY=spriteY+cos(spriteRot)*10;
+		case 0:
+			spriteX=spriteX+sin(spriteRot/180*M_PI)*10;
+			spriteY=spriteY+cos(spriteRot/180*M_PI)*10;
 			break;
-		case 2:
+		case 1:
 			spriteRot=spriteRot+15;break;
-		case 3:
+		case 2:
 			spriteRot=spriteRot-15;break;
-		case 4:
+		case 3:
 			spriteX=(rand()%320)-160;
 			spriteY=(rand()%240)-120;
 			break;
-		case 5:
+		case 4:
 			spriteX=0;
 			spriteY=0;
 			break;
