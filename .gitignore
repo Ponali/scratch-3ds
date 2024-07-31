@@ -1,0 +1,4 @@
+scratch-3ds.*
+build/*
+romfs/*
+.vscode/*
