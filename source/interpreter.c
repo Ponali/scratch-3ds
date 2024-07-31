@@ -1,7 +1,7 @@
 #include <citro2d.h>
 #include <math.h>
 #include <stdlib.h>
-//#include "globals.c"
+// #include "globals.c"
 #include "editor.c"
 
 static bool initframe=true;
@@ -30,6 +30,32 @@ static void insertRuntimeBlock(struct Block newBlock){
 	//}
 }
 
+static void runBlock(struct Block* block) {
+	switch(block->id) {
+		case MOVESTEPS:
+			spriteX=spriteX+sin(spriteRot/180*M_PI)*10;
+			spriteY=spriteY+cos(spriteRot/180*M_PI)*10;
+			break;
+		case TURNCLOCKWISE:
+			spriteRot=spriteRot+15;
+			break;
+		case TURNCOUNTERCLOCKWISE:
+			spriteRot=spriteRot-15;
+			break;
+		case GOTORANDOMPOS:
+			spriteX=(rand()%320)-160;
+			spriteY=(rand()%240)-120;
+			break;
+		case GOTOORIGIN:
+			spriteX=0;
+			spriteY=0;
+			break;
+	}
+
+	if (block->hasAfter) {
+		runBlock(block->after);
+	}
+}
 
 static void startProject(){
 	// must be ran when the green flag is clicked
@@ -37,7 +63,8 @@ static void startProject(){
 	// get green flags and add it to runtime blocks
 	for(int i=0;i<blockMatrixSize;i++){
 		if(blockMatrixDynamic[i].id==47){ // corresponds to the "when flag clicked" block
-			insertRuntimeBlock(blockMatrixDynamic[i]);
+			// insertRuntimeBlock(blockMatrixDynamic[i]);
+			runBlock(blockMatrixDynamic[i].after);
 		}
 	}
 
@@ -49,50 +76,44 @@ static void startProject(){
 		rand();
 }
 
-static void runBlock(int blockID) {
-	switch(blockID) {
-		case 0:
-			spriteX=spriteX+sin(spriteRot/180*M_PI)*10;
-			spriteY=spriteY+cos(spriteRot/180*M_PI)*10;
-			break;
-		case 1:
-			spriteRot=spriteRot+15;break;
-		case 2:
-			spriteRot=spriteRot-15;break;
-		case 3:
-			spriteX=(rand()%320)-160;
-			spriteY=(rand()%240)-120;
-			break;
-		case 4:
-			spriteX=0;
-			spriteY=0;
-			break;
-	}
-}
+// static void projectTick(){
+// 	// must be ran 30 times per second (every 2 frames)
+// 	// TODO: redo this function a little bit
+// 	for(int i=0;i<runtimeBlocksSize;i++){
+// 		runBlock(runtimeBlocks[i].id);
+// 		runtimeBlocks[i]=(*runtimeBlocks[i].after);
+// 	}
+	
+// }
 
-static void projectTick(){
-	// must be ran 30 times per second (every 2 frames)
-	for(int i=0;i<runtimeBlocksSize;i++){
-		runBlock(runtimeBlocks[i].id);
-		runtimeBlocks[i]=(*runtimeBlocks[i].after);
-	}
+static void clamp(float* val, float max, float min) {
+	// a segfault is waiting to happen here :trol:
+	if (*val>max)
+		*val = max;
+	else if (*val<min)
+		*val = min;
 }
 
 static void projectFrame(bool scr, u32 kDown) {
-	framecount++;
-	if(framecount==2) {
-		framecount=0;
-		projectTick();
-	}
-	if(spriteX>240.0f) {
-		spriteX=240.0f;
-	} if(spriteX<-240.0f) {
-		spriteX=-240.0f;
-	} if(spriteY>180.0f) {
-		spriteY=180.0f;
-	} if(spriteY<-180.0f) {
-		spriteY=-180.0f;
-	} if(spriteRot>=360.0f) {
+	// framecount++;
+	// if(framecount==2) {
+	// 	framecount=0;
+	// 	projectTick();
+	// }
+
+	// if(spriteX>240.0f) {
+	// 	spriteX=240.0f;
+	// } if(spriteX<-240.0f) {
+	// 	spriteX=-240.0f;
+	// } if(spriteY>180.0f) {
+	// 	spriteY=180.0f;
+	// } if(spriteY<-180.0f) {
+	// 	spriteY=-180.0f;
+	// }
+
+	clamp(&spriteX, 240.0f, -240.0f);// a lil simplification
+	clamp(&spriteY, 180.0f, -180.0f);
+	if(spriteRot>=360.0f) {
 		spriteRot=spriteRot-360.0f; //i would use the % operator here but it doesnt work on floats. yes, scratch rotation may not be a round number.
 	} if(spriteRot<0.0f) {
 		spriteRot=spriteRot+360.0f;

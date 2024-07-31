@@ -44,7 +44,7 @@ static char blockText[107][36] =
 "stop all sounds",
 "change pitch effect by 10",
 "set pitch effect to 100",
-"clear sound effects",
+"clear sound effects",typedef 
 "change volume by -10",
 "set volume to 100",
 "volume",
@@ -117,3 +117,11 @@ static char* getBlockText(int idx){return blockText[idx];};
 static bool getBlockHat(int idx){return blockHat[idx];};
 static bool getBlockEnd(int idx){return blockEnd[idx];};
 static bool getReporter(int idx){return reporter[idx];};
+
+enum blockTypes {
+    MOVESTEPS,
+    TURNCLOCKWISE,
+    TURNCOUNTERCLOCKWISE,
+    GOTORANDOMPOS,
+    GOTOORIGIN
+}; // TODO: add the other blocks
