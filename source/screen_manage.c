@@ -43,7 +43,7 @@ static void renderScreen(u32 kHeld, bool scr, float touchX, float touchY, s16 ci
 			blockSelector(scr,kDown,useX,useY);
 		} else {
 			// temporary triangle
-			projectFrame(scr, kDown);
+			projectFrame(scr, kDown, touchX, touchY);
 			C2D_DrawTriangle(0,0,C2D_Color32(0xFF,10,10,0xFF),150,0,C2D_Color32(10,0xFF,10,0xFF),0,150,C2D_Color32(10,10,0xFF,0xFF),0);
 			buttonPrompt(scr,"\uE002: Block selector",0);
 		}

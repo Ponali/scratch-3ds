@@ -27,7 +27,7 @@ static char blockText[107][36] =
 "next costume",
 "switch backdrop to backdrop1",
 "next backdrop",
-"change size by 10",//i wish you could do that irl iykwim
+"change size by 10",
 "set size to 100%",
 "change color effect by 25",
 "set color effect to 0",
@@ -44,7 +44,7 @@ static char blockText[107][36] =
 "stop all sounds",
 "change pitch effect by 10",
 "set pitch effect to 100",
-"clear sound effects",typedef 
+"clear sound effects",
 "change volume by -10",
 "set volume to 100",
 "volume",
@@ -120,8 +120,12 @@ static bool getReporter(int idx){return reporter[idx];};
 
 enum blockTypes {
     MOVESTEPS,
-    TURNCLOCKWISE,
-    TURNCOUNTERCLOCKWISE,
+    TURNCW,
+    TURNCCW,
     GOTORANDOMPOS,
-    GOTOORIGIN
+    GOTOPOS,
+	GLIDETORANDOMPOS,
+	GLIDETOPOS,
+	POINTINDIR,
+	POINTTOMOUSE,
 }; // TODO: add the other blocks

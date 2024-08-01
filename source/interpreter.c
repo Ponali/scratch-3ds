@@ -30,41 +30,55 @@ static void insertRuntimeBlock(struct Block newBlock){
 	//}
 }
 
-static void runBlock(struct Block* block) {
+static void runBlock(struct Block* block, bool scr, float touchX, float touchY) {
 	switch(block->id) {
 		case MOVESTEPS:
 			spriteX=spriteX+sin(spriteRot/180*M_PI)*10;
-			spriteY=spriteY+cos(spriteRot/180*M_PI)*10;
+			spriteY=spriteY-cos(spriteRot/180*M_PI)*10;
 			break;
-		case TURNCLOCKWISE:
+		case TURNCW:
 			spriteRot=spriteRot+15;
 			break;
-		case TURNCOUNTERCLOCKWISE:
+		case TURNCCW:
 			spriteRot=spriteRot-15;
 			break;
 		case GOTORANDOMPOS:
 			spriteX=(rand()%320)-160;
 			spriteY=(rand()%240)-120;
 			break;
-		case GOTOORIGIN:
+		case GOTOPOS:
 			spriteX=0;
 			spriteY=0;
+			break;
+		case GLIDETORANDOMPOS:
+			//black magic
+			break;
+		case GLIDETOPOS:
+			//more black magic
+			break;
+		case POINTINDIR:
+			spriteRot = 90;
+			break;
+		case POINTTOMOUSE:
+			if(scr==false && ! touchX==0 && touchY==0) {
+				//math
+			}
 			break;
 	}
 
 	if (block->hasAfter) {
-		runBlock(block->after);
+		runBlock(block->after, scr, touchX, touchY);
 	}
 }
 
-static void startProject(){
+static void startProject(bool scr, float touchX, float touchY){
 	// must be ran when the green flag is clicked
 	
 	// get green flags and add it to runtime blocks
 	for(int i=0;i<blockMatrixSize;i++){
 		if(blockMatrixDynamic[i].id==47){ // corresponds to the "when flag clicked" block
 			// insertRuntimeBlock(blockMatrixDynamic[i]);
-			runBlock(blockMatrixDynamic[i].after);
+			runBlock(blockMatrixDynamic[i].after, scr, touchX, touchY);
 		}
 	}
 
@@ -94,7 +108,7 @@ static void clamp(float* val, float max, float min) {
 		*val = min;
 }
 
-static void projectFrame(bool scr, u32 kDown) {
+static void projectFrame(bool scr, u32 kDown, float touchX, float touchY) {
 	// framecount++;
 	// if(framecount==2) {
 	// 	framecount=0;
@@ -133,6 +147,6 @@ static void projectFrame(bool scr, u32 kDown) {
 	}
 	C2D_SpriteSetRotationDegrees(&sprite, spriteRot-90.0f);
 	if(kDown&KEY_START) {
-		startProject();
+		startProject(scr, touchX, touchY);
 	}
 }
